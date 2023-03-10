@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hunt_MAUI.MainPage"
+             Title="Hunt">
+
+    <Grid Margin="4" RowSpacing="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width ="*"/>
+                <ColumnDefinition Width ="*"/>
+                <ColumnDefinition Width ="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Text="Exit Game" Command="{Binding ExitCommand}" Grid.Column="0"/>
+            <Button Text="Load Game" Grid.Column="1" Command="{Binding LoadGameCommand}"/>
+            <Button Text="Save Game" Grid.Column="2" Command="{Binding SaveGameCommand}"/>
+
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Text="New Game" Command="{Binding NewGameCommand}" Grid.Column="0" CommandParameter="{Binding Source={x:Reference SizePicker}, Path=SelectedIndex}"/>
+            <Picker x:Name="SizePicker" Title="Select game size" HorizontalTextAlignment="Center" Grid.Column="1" HorizontalOptions="CenterAndExpand" SelectedIndex="0">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Small</x:String>
+                        <x:String>Medium</x:String>
+                        <x:String>Large</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+            <Button Text="Delete saves" Command="{Binding DeleteSavesCommand}" Grid.Column="2"/>
+        </Grid>
+
+
+        <Grid
+            Grid.Row="2"
+            BindableLayout.ItemsSource="{Binding Fields}"
+            RowDefinitions="{Binding GameTableRows}"
+            ColumnDefinitions="{Binding GameTableColumns}"
+            ColumnSpacing="4"
+            RowSpacing="4">
+
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <ImageButton
+                        Grid.Row="{Binding X}"
+                        Grid.Column="{Binding Y}"
+                        Command="{Binding InputCommand}"
+                        Padding="0"
+                        VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand" 
+                        Aspect="Center"
+                        IsEnabled="True"
+                        Source="nothing.png"
+                        >
+                        <ImageButton.Style>
+                            <Style TargetType="ImageButton">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Color}" Value="0" TargetType="ImageButton">
+                                        <Setter Property="Background" Value="Brown"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Color}" Value="1" TargetType="ImageButton">
+                                        <Setter Property="Background" Value="AliceBlue"/>
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding ContentImageType}" Value="hunter" TargetType="ImageButton">
+                                        <Setter Property="Source" Value="hunter.png"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ContentImageType}" Value="prey" TargetType="ImageButton">
+                                        <Setter Property="Source" Value="prey.png"/>
+                                    </DataTrigger>
+                                    <!--<DataTrigger Binding="{Binding ContentImageType}" Value="target" TargetType="ImageButton">
+                                        <Setter Property="Source" Value="indicator_s.png"/>
+                                    </DataTrigger>-->
+                                </Style.Triggers>
+                            </Style>
+                        </ImageButton.Style>
+                    </ImageButton>
+
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="{Binding RemRounds}" Grid.Column="0" HorizontalTextAlignment="Center"/>
+            <Label Text="{Binding NextTurn}" Grid.Column="1" HorizontalTextAlignment="Center"/>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
